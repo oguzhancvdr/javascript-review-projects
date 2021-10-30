@@ -223,6 +223,7 @@ nav {
     display: none;
   }
   .links {
+    /*! IMPORTANT TO ADD TO TOGGLE */
     height: auto;
     display: flex;
   }
