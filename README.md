@@ -6,3 +6,4 @@
 - [04-navbar](https://navbar-toggle-js.netlify.app/)
 - [05-sidebar](https://sidebarnet.netlify.app/)
 - [06-modal](https://easymodal.netlify.app/)
+- [07-questions](https://questions-gen.netlify.app/)
