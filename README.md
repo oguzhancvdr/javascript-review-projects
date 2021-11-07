@@ -8,3 +8,4 @@
 - [06-modal](https://easymodal.netlify.app/)
 - [07-questions](https://questions-gen.netlify.app/)
 - [08-our menu](https://ourmenucom.netlify.app/)
+- [08-video](https://video-play-pause.netlify.app/)
