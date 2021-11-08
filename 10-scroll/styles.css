@@ -276,7 +276,7 @@ nav {
     display: none;
   }
   .links-container {
-    height: auto !important;
+    height: auto !important; /* it is important to understand */
   }
   .links {
     display: flex;
