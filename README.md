@@ -10,3 +10,4 @@
 - [08-our menu](https://ourmenucom.netlify.app/)
 - [09-video](https://video-play-pause.netlify.app/)
 - [10-scroling-with-js](https://scroll-with-js.netlify.app/)
+- [11-tabs](https://tabpanes.netlify.app/)
