@@ -12,3 +12,4 @@
 - [10-scroling-with-js](https://scroll-with-js.netlify.app/)
 - [11-tabs](https://tabpanes.netlify.app/)
 - [12-countdown](https://countdown-10days.netlify.app/)
+- [13-tired-of-lorem-ipsum](https://tired-of-lorem-ipsum.netlify.app/)
