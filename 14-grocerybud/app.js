@@ -5,7 +5,7 @@ const grocery = document.getElementById('grocery')
 const submitBtn = document.querySelector('.submit-btn')
 const container = document.querySelector('.grocery-container')
 const list = document.querySelector('.grocery-list')
-const clearBttn = document.querySelector('.clear-btn')
+const clearBtn = document.querySelector('.clear-btn')
 
 // edit option
 let editElement
@@ -15,6 +15,8 @@ let editID = ''
 // ****** EVENT LISTENERS **********
 // submit form
 form.addEventListener('submit', addItem)
+// clear items
+clearBtn.addEventListener('click', clearItems)
 
 // ****** FUNCTIONS **********
 // generate unique id
@@ -72,15 +74,30 @@ function displayAlert(text, action) {
     alert.classList.remove(`alert-${action}`)
   }, 1500)
 }
-
-// set back to default
-function setBackToDefault(){
-  console.log('set back to default');
+// clear items
+function clearItems() {
+  const items = document.querySelectorAll('.grocery-item')
+  if (items.length > 0) {
+    items.forEach(function (item) {
+      list.removeChild(item)
+    })
+  }
+  container.classList.remove('show-container')
+  displayAlert('empty list', 'success')
+  setBackToDefault()
+  // localStorage.removeItem('list')
+}
+// set back to default (clear value of input after submitting)
+function setBackToDefault() {
+  grocery.value = ''
+  editFlag = false
+  editID = ''
+  submitBtn.textContent = 'submit'
 }
 
 // ****** LOCAL STORAGE **********
-function addToLocalStorage(id, value){
-  console.log('added local storage');
+function addToLocalStorage(id, value) {
+  console.log('added local storage')
 }
 
 // ****** SETUP ITEMS **********
