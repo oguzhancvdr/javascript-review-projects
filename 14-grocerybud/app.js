@@ -94,8 +94,26 @@ function clearItems() {
   // localStorage.removeItem('list')
 }
 // delete func
-function deleteItem(){
-console.log('item deleted');
+function deleteItem(e){
+  // if we used e.target then we could access icons.
+  // So to reach parent of parentElement cant be possible
+  // we used currentTarget beacuse path that we reach is specific
+  const element = e.currentTarget.parentElement.parentElement
+  const id = element.dateset.id
+  const elemName = element.children
+  list.removeChild(element)
+  if(list.children.length === 0){
+    container.classList.remove('show-container')
+  }
+  for (let item of elemName) {
+    if(item.classList.contains('title')){
+      displayAlert(`the ${item.textContent} was deleted.`, 'success')
+      break
+    }
+  }
+  setBackToDefault()
+  // remove from local storage
+  // removeFromLocalStorage(id)
 }
 // edit func
 function editItem(){
@@ -110,8 +128,7 @@ function setBackToDefault() {
 }
 
 // ****** LOCAL STORAGE **********
-function addToLocalStorage(id, value) {
-  console.log('added local storage')
-}
+function addToLocalStorage(id, value) {}
+function removeFromLocalStorage(id){}
 
 // ****** SETUP ITEMS **********
