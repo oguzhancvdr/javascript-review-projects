@@ -64,7 +64,12 @@ function addItem(e) {
     // set back to default
     setBackToDefault()
   } else if (value && editFlag) {
-    console.log('editing')
+    editElement.innerHTML = value
+    displayAlert('Your item has been updated', 'success')
+    // edit localStorage
+    // editLocalStorage(editID,value)
+    setBackToDefault()
+
   } else {
     displayAlert('please enter value', 'danger')
   }
@@ -94,20 +99,20 @@ function clearItems() {
   // localStorage.removeItem('list')
 }
 // delete func
-function deleteItem(e){
+function deleteItem(e) {
   // if we used e.target then we could access icons.
   // So to reach parent of parentElement cant be possible
   // we used currentTarget beacuse path that we reach is specific
   const element = e.currentTarget.parentElement.parentElement
-  const id = element.dateset.id
+  const id = element.dataset.id
   const elemName = element.children
   list.removeChild(element)
-  if(list.children.length === 0){
+  if (list.children.length === 0) {
     container.classList.remove('show-container')
   }
   for (let item of elemName) {
-    if(item.classList.contains('title')){
-      displayAlert(`the ${item.textContent} was deleted.`, 'success')
+    if (item.classList.contains('title')) {
+      displayAlert(`the ${item.innerHTML} was deleted.`, 'success')
       break
     }
   }
@@ -116,8 +121,16 @@ function deleteItem(e){
   // removeFromLocalStorage(id)
 }
 // edit func
-function editItem(){
-  console.log('item edited');
+function editItem(e) {
+  const element = e.currentTarget.parentElement.parentElement
+  // set edit item
+  editElement = e.currentTarget.parentElement.previousElementSibling
+  // set form value
+  grocery.value = editElement.innerHTML
+  editFlag = true
+  editID = element.dataset.id
+  submitBtn.textContent = 'edit'
+
 }
 // set back to default (clear value of input after submitting)
 function setBackToDefault() {
@@ -129,6 +142,7 @@ function setBackToDefault() {
 
 // ****** LOCAL STORAGE **********
 function addToLocalStorage(id, value) {}
-function removeFromLocalStorage(id){}
+function removeFromLocalStorage(id) {}
+function editLocalStorage(id, value){}
 
 // ****** SETUP ITEMS **********
