@@ -47,6 +47,12 @@ function addItem(e) {
         <i class="fas fa-trash"></i>
       </button>
     </div>`
+    // after our element created we can access edit and delete btns
+    const deleteBtn = element.querySelector('.delete-btn')
+    const editBtn = element.querySelector('.edit-btn')
+    // now we can add event listeners
+    deleteBtn.addEventListener('click', deleteItem)
+    editBtn.addEventListener('click', editItem)
     // append child
     list.appendChild(element)
     // display alert
@@ -86,6 +92,14 @@ function clearItems() {
   displayAlert('empty list', 'success')
   setBackToDefault()
   // localStorage.removeItem('list')
+}
+// delete func
+function deleteItem(){
+console.log('item deleted');
+}
+// edit func
+function editItem(){
+  console.log('item edited');
 }
 // set back to default (clear value of input after submitting)
 function setBackToDefault() {
