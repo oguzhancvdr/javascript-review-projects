@@ -25,7 +25,7 @@ window.addEventListener('DOMContentLoaded', setupItems)
 // generate unique id
 function uid(){
   const head = Date.now().toString(36)
-  const tail = Math.random().toString(36).substr(2)
+  const tail = Math.random().toString(36).slice(2)
   return head + tail
 }
 // add item
