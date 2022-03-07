@@ -15,3 +15,5 @@
 - [13-tired-of-lorem-ipsum](https://tired-of-lorem-ipsum.netlify.app/)
 - [14-grocery-todo](https://grocery-todo-js.netlify.app/)
 - [15-slider](https://soft-slider.netlify.app/)
+- [16-counter-oop](https://counter-with-oop.netlify.app/)
+- [16-gallery-oop](https://gallery-with-oop.netlify.app/)
