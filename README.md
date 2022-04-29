@@ -16,5 +16,5 @@
 - [14-grocery-todo](https://grocery-todo-js.netlify.app/)
 - [15-slider](https://soft-slider.netlify.app/)
 - [16-counter-oop](https://counter-with-oop.netlify.app/)
-- [16-gallery-oop](https://gallery-with-oop.netlify.app/)
-- [17-bankist](https://bankistio.netlify.app/)
+- [17-gallery-oop](https://gallery-with-oop.netlify.app/)
+- [18-bankist](https://bankistio.netlify.app/)
