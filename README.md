@@ -18,3 +18,4 @@
 - [16-counter-oop](https://counter-with-oop.netlify.app/)
 - [17-gallery-oop](https://gallery-with-oop.netlify.app/)
 - [18-bankist](https://bankistio.netlify.app/)
+- [19-bankist-landing](https://bankist-landing-app.netlify.app/)
