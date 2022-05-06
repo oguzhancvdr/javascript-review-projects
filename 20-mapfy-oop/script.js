@@ -22,6 +22,52 @@ const inputDistance = document.querySelector(".form__input--distance");
 const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
+
+class Workout {
+  date = new Date();
+  id = this.#uniqueId();
+  
+  constructor(coords, distance, duration) {
+    this.coords = coords; // [lat, lng]
+    this.distance = distance; // in km
+    this.duration = duration; // in min
+  }
+
+  #uniqueId(len=16){
+    return Number.parseInt(Math.ceil(Math.random() * this.date.getTime()).toPrecision(len).toString().replace(".", ""))
+  }
+}
+
+class Running extends Workout{
+  constructor(coords, distance, duration, cadence){
+    super(coords, distance, duration);
+    this.cadence = cadence;
+    this.calcPace();
+  }
+
+  calcPace(){
+    // min/km
+    this.pace = this.duration / this.distance;
+    return this.pace;
+  }
+}
+
+class Cycling extends Workout{
+  constructor(coords, distance, duration, elevationGain){
+    super(coords, distance, duration);
+    this.elevationGain = elevationGain;
+    this.calcSpeed();
+  }
+  
+  calcSpeed(){
+    // km/h
+    this.speed = this.distance / (this.duration / 60);
+    return this.speed;
+  }
+}
+
+
+// APPLICATION ARCHITECTURE
 class App {
   #map;
   #mapEvent;
@@ -34,7 +80,7 @@ class App {
 
   #getPosition() {
     if (navigator.geolocation) {
-      const optionsOfGeolocation = {
+      const options = {
         enableHighAccuracy: true,
         timeout: 3000, // Amount of time before the error callback is invoked
         maximumAge: 0, // Maximum cached position age in miliseconds
@@ -44,20 +90,20 @@ class App {
         function () {
           alert("Could not get your location");
         },
-        optionsOfGeolocation
+        options
       );
     }
   }
 
   #loadMap(position) {
     const { latitude, longitude } = position.coords;
-    // L.map('map') -> string map should point our html element with id=name
+    // L.map('map') -> string "map" should point our html element with id="map"
     // map will be inserted into that element
     const coords = [latitude, longitude];
     //! this points undefined because in the #getPosition func,
     // #loadMap just regular func call so it points undefined
     // console.log(this); //! undefined
-    // to solve this we need to manually bind this keyword look at44th line.
+    // to solve this we need to manually bind this keyword look at 43th line.
 
     this.#map = L.map("map").setView(coords, 13);
 
