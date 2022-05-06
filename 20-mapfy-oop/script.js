@@ -22,36 +22,89 @@ const inputDistance = document.querySelector(".form__input--distance");
 const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
+class App {
+  #map;
+  #mapEvent;
 
-const optionsOfGeolocation = {
-  enableHighAccuracy: true,
-  timeout: 3000, // Amount of time before the error callback is invoked
-  maximumAge: 0, // Maximum cached position age in miliseconds
-};
+  constructor() {
+    this.#getPosition();
+    form.addEventListener("submit", this.#newWorkout.bind(this));
+    inputType.addEventListener("input", this.#toggleElevationField);
+  }
 
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    function (position) {
-      const { latitude, longitude } = position.coords;
-      // console.log(`https://www.google.com/maps/@${latitude},${longitude}`);
-      // L.map('map') -> string map should point our html element with id=name
-      // map will be inserted into that element
-      const coords = [latitude, longitude]
-      const map = L.map("map").setView(coords, 13);
+  #getPosition() {
+    if (navigator.geolocation) {
+      const optionsOfGeolocation = {
+        enableHighAccuracy: true,
+        timeout: 3000, // Amount of time before the error callback is invoked
+        maximumAge: 0, // Maximum cached position age in miliseconds
+      };
+      navigator.geolocation.getCurrentPosition(
+        this.#loadMap.bind(this), // fix undefined this
+        function () {
+          alert("Could not get your location");
+        },
+        optionsOfGeolocation
+      );
+    }
+  }
 
-      L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(map);
+  #loadMap(position) {
+    const { latitude, longitude } = position.coords;
+    // L.map('map') -> string map should point our html element with id=name
+    // map will be inserted into that element
+    const coords = [latitude, longitude];
+    //! this points undefined because in the #getPosition func,
+    // #loadMap just regular func call so it points undefined
+    // console.log(this); //! undefined
+    // to solve this we need to manually bind this keyword look at44th line.
 
-      L.marker(coords)
-        .addTo(map)
-        .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
-        .openPopup();
-    },
-    function () {
-      alert("Could not get your location");
-    },
-    optionsOfGeolocation
-  );
+    this.#map = L.map("map").setView(coords, 13);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", 
+      {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',})
+      .addTo(this.#map);
+
+    // Handling clicks on map
+    this.#map.on("click", this.#showForm.bind(this));
+  }
+
+  #showForm(mapE) {
+    this.#mapEvent = mapE;
+    form.classList.remove("hidden");
+    inputDistance.focus();
+  }
+
+  #toggleElevationField() {
+    // select closest parent. closest method is like reverse querySelector
+    inputElevation.closest(".form__row").classList.toggle("form__row--hidden");
+    inputCadence.closest(".form__row").classList.toggle("form__row--hidden");
+  }
+
+  #newWorkout(e) {
+    e.preventDefault();
+
+    // Clear input fields
+    inputDistance.value = inputDuration.value = inputCadence.value = inputElevation.value = "";
+
+    const {
+      latlng: { lat, lng },
+    } = this.#mapEvent;
+
+    L.marker([lat, lng])
+      .addTo(this.#map)
+      .bindPopup(
+        L.popup({
+          maxWidth: 250,
+          minWidth: 100,
+          autoClose: false,
+          closeOnClick: false,
+          className: "running-popup",
+        })
+      )
+      .setPopupContent("Workout")
+      .openPopup();
+  }
 }
+
+const app = new App();
