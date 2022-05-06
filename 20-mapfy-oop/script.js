@@ -11,6 +11,7 @@ const inputElevation = document.querySelector(".form__input--elevation");
 class Workout {
   date = new Date();
   id = this.#uniqueId() + "";
+  // clicks = 0;
 
   constructor(coords, distance, duration) {
     this.coords = coords; // [lat, lng]
@@ -36,6 +37,11 @@ class Workout {
       months[this.date.getMonth()]
     } ${this.date.getDate()}`;
   }
+
+  // click(){
+  //   this.clicks++;
+  //   console.log(this.clicks);
+  // }
 }
 
 class Running extends Workout {
@@ -78,11 +84,17 @@ class App {
   #map;
   #mapEvent;
   #workouts = [];
+  #zoomLvl = 13
 
   constructor() {
+    // get user's position
     this.#getPosition();
+    // Attach event handlers
     form.addEventListener("submit", this.#newWorkout.bind(this));
     inputType.addEventListener("input", this.#toggleElevationField);
+    containerWorkouts.addEventListener('click', this.#moveToPopup.bind(this));
+    // get data from localstorage
+    this.#getLocalstorage();
   }
 
   #getPosition() {
@@ -112,7 +124,7 @@ class App {
     // console.log(this); //! undefined
     // to solve this we need to manually bind this keyword look at 43th line.
 
-    this.#map = L.map("map").setView(coords, 13);
+    this.#map = L.map("map").setView(coords, this.#zoomLvl);
 
     L.tileLayer("https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {
       attribution:
@@ -121,6 +133,11 @@ class App {
 
     // Handling clicks on map
     this.#map.on("click", this.#showForm.bind(this));
+
+    // rendering markers in first load
+    this.#workouts.forEach(workout => {
+      this.#renderWorkoutMarker(workout);
+    })
   }
 
   #showForm(mapE) {
@@ -148,9 +165,8 @@ class App {
     const allPositive = (...inputs) => inputs.every((inp) => inp > 0);
     e.preventDefault();
 
-    // todo get data from form
+    // get data from form
     const type = inputType.value;
-    // convert to number with "+" prefix
     const distance = +inputDistance.value;
     const duration = +inputDuration.value;
     const {
@@ -186,7 +202,6 @@ class App {
 
     // Add new object to workout array
     this.#workouts.push(workout);
-    console.log(workout);
 
     // render workout on map as marker
     this.#renderWorkoutMarker(workout);
@@ -196,6 +211,9 @@ class App {
 
     // hide form + Clear input fields
     this.#hideForm();
+
+    // Set localstorage to all workouts
+    this.#setLocalstorage();
 
   }
 
@@ -264,6 +282,46 @@ class App {
     form.insertAdjacentHTML("afterend", html);
   }
 
+  #moveToPopup(e){
+    const workoutEl = e.target.closest('.workout');
+
+    if(!workoutEl) return;
+
+    const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
+    this.#map.setView(workout.coords, this.#zoomLvl, {
+      animate: true,
+      pan: {
+        duration:1,
+      }
+    })
+
+    // using the publick interface
+    // workout.click(); // ! its point was that localstorage object is not inherited parent class
+  }
+
+  #setLocalstorage(){
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  }
+
+  #getLocalstorage(){
+    const data = localStorage.getItem('workouts');
+    if(!data) return;
+    this.#workouts = JSON.parse(data);
+
+    this.#workouts.forEach(workout => {
+      this.#renderWorkout(workout)
+      //! TypeError: Cannot read properties of undefined (reading 'addLayer')
+      // because we are trying to add markers on the map which is yet fully loaded
+      // so we need to wait map is fully loaded and then we can add markers.
+      // this.#renderWorkoutMarker(workout); // ? lets move this code to #loadMap() func.
+    })
+  }
+  
+  //! just for reset localstorage data in the console
+  reset(){
+    localStorage.removeItem('workouts');
+    location.reload();
+  }
 }
 
 const app = new App();
