@@ -8,6 +8,17 @@ const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
 
+/**
+ * TODOS:
+ * edit, delete, delete all workouts
+ * sort workouts by a certain field(e.g distance)
+ * Re-build Running and Cycling objects coming from Local Storage
+ * More realistic error and confirmation messages;
+ * Ability to position the map to show all workouts[very hard];
+ * Ability to draw lines and shapes instead of just points [very hard];
+ * Geocode location from coordinates [after async section]
+ * Display weather data for workout time and place [after async section]
+ */
 class Workout {
   date = new Date();
   id = this.#uniqueId() + "";
@@ -316,7 +327,7 @@ class App {
       // this.#renderWorkoutMarker(workout); // ? lets move this code to #loadMap() func.
     })
   }
-  
+
   //! just for reset localstorage data in the console
   reset(){
     localStorage.removeItem('workouts');
