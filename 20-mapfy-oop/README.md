@@ -16,6 +16,8 @@ Build a Running and Cycling recording app using vanilla JS.
 - Private and public instance fields and methods
 - ES6 class syntax
 - Abstraction, Encapsulation, Inheritance and Polimorphisim
+- Project Architecture
+- Flowchart
 
 ## Features
 
