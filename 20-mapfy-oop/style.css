@@ -55,6 +55,22 @@ a:visited {
   margin-bottom: 4rem;
 }
 
+.delete{
+  float: right;
+  font-size:1.5rem;
+  color:orangered;
+}
+.arrow{
+  font-size:2rem;
+  color:steelblue;
+  cursor: pointer;
+}
+.arrow>span{
+  color:#fff;
+  display: inline-block;
+  margin-left:1rem;
+}
+
 .workouts {
   list-style: none;
   height: 77vh;

@@ -7,10 +7,11 @@ const inputDistance = document.querySelector(".form__input--distance");
 const inputDuration = document.querySelector(".form__input--duration");
 const inputCadence = document.querySelector(".form__input--cadence");
 const inputElevation = document.querySelector(".form__input--elevation");
+// const arrowIcon = document.querySelector(".arrow");
 
 /**
  * TODOS:
- * edit, delete, delete all workouts
+ * edit, delete, delete all workouts ✅
  * sort workouts by a certain field(e.g distance)
  * Re-build Running and Cycling objects coming from Local Storage
  * More realistic error and confirmation messages;
@@ -95,7 +96,7 @@ class App {
   #map;
   #mapEvent;
   #workouts = [];
-  #zoomLvl = 13
+  #zoomLvl = 13;
 
   constructor() {
     // get user's position
@@ -103,7 +104,8 @@ class App {
     // Attach event handlers
     form.addEventListener("submit", this.#newWorkout.bind(this));
     inputType.addEventListener("input", this.#toggleElevationField);
-    containerWorkouts.addEventListener('click', this.#moveToPopup.bind(this));
+    containerWorkouts.addEventListener("click", this.#moveToPopup.bind(this));
+    // arrowIcon.addEventListener("click", this.#sortToDistance.bind(this));
     // get data from localstorage
     this.#getLocalstorage();
   }
@@ -146,9 +148,9 @@ class App {
     this.#map.on("click", this.#showForm.bind(this));
 
     // rendering markers in first load
-    this.#workouts.forEach(workout => {
+    this.#workouts.forEach((workout) => {
       this.#renderWorkoutMarker(workout);
-    })
+    });
   }
 
   #showForm(mapE) {
@@ -157,12 +159,12 @@ class App {
     inputDistance.focus();
   }
 
-  #hideForm(){
-    // prettier-ignore    
+  #hideForm() {
+    // prettier-ignore
     inputDistance.value = inputDuration.value =  inputCadence.value = inputElevation.value = "";
-    form.style.display = 'none'
+    form.style.display = "none";
     form.classList.add("hidden");
-    setTimeout(() => form.style.display = 'grid', 1000);
+    setTimeout(() => (form.style.display = "grid"), 1000);
   }
 
   #toggleElevationField() {
@@ -172,7 +174,8 @@ class App {
   }
 
   #newWorkout(e) {
-    const validInputs = (...inputs) => inputs.every((inp) => Number.isFinite(inp));
+    const validInputs = (...inputs) =>
+      inputs.every((inp) => Number.isFinite(inp));
     const allPositive = (...inputs) => inputs.every((inp) => inp > 0);
     e.preventDefault();
 
@@ -225,7 +228,6 @@ class App {
 
     // Set localstorage to all workouts
     this.#setLocalstorage();
-
   }
 
   #renderWorkoutMarker(workout) {
@@ -240,7 +242,9 @@ class App {
           className: `${workout.type}-popup`,
         })
       )
-      .setPopupContent(`${workout.type === "running" ? "🏃‍♂️" : "🚴‍♀️"} ${workout.description }`)
+      .setPopupContent(
+        `${workout.type === "running" ? "🏃‍♂️" : "🚴‍♀️"} ${workout.description}`
+      )
       .openPopup();
   }
 
@@ -248,9 +252,13 @@ class App {
     // common part for both running and cycling
     let html = `
         <li class="workout workout--${workout.type}" data-id="${workout.id}">
-          <h2 class="workout__title">${workout.description}</h2>
-          <div class="workout__details">
-            <span class="workout__icon">${workout.type === "running" ? "🏃‍♂️" : "🚴‍♀️"}</span>
+        <h2 class="workout__title">${workout.description}
+          <div class="delete"><i class="fa fa-trash-o"></i></div>
+        </h2>
+        <div class="workout__details">
+            <span class="workout__icon">${
+              workout.type === "running" ? "🏃‍♂️" : "🚴‍♀️"
+            }</span>
             <span class="workout__value">${workout.distance}</span>
             <span class="workout__unit">km</span>
           </div>
@@ -274,7 +282,7 @@ class App {
         </div>
       </li>
       `;
-    
+
     if (workout.type === "cycling")
       html += `
         <div class="workout__details">
@@ -293,44 +301,68 @@ class App {
     form.insertAdjacentHTML("afterend", html);
   }
 
-  #moveToPopup(e){
-    const workoutEl = e.target.closest('.workout');
+  #deleteWorkout(id) {
+    let index = -1;
+    for (const [i, item] of this.#workouts.entries()) {
+      if (item.id === id) {
+        index = i;
+        break;
+      }
+    }
+    this.#workouts.splice(index, 1);
+    this.#setLocalstorage();
+    location.reload();
+  }
 
-    if(!workoutEl) return;
-
-    const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
+  #moveToPopup(e) {
+    const workoutEl = e.target.closest(".workout");
+    if (!workoutEl) return;
+    
+    const workout = this.#workouts.find(
+      (work) => work.id === workoutEl.dataset.id
+      );
     this.#map.setView(workout.coords, this.#zoomLvl, {
       animate: true,
       pan: {
-        duration:1,
-      }
-    })
+        duration: 1,
+      },
+    });
+
+    // delete workout
+    const deleteIcon = e.target.closest(".delete");
+    if (deleteIcon) {
+      this.#deleteWorkout(workout.id);
+    }
 
     // using the publick interface
     // workout.click(); // ! its point was that localstorage object is not inherited parent class
   }
 
-  #setLocalstorage(){
-    localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+  #setLocalstorage() {
+    localStorage.setItem("workouts", JSON.stringify(this.#workouts));
   }
 
-  #getLocalstorage(){
-    const data = localStorage.getItem('workouts');
-    if(!data) return;
+  #getLocalstorage() {
+    const data = localStorage.getItem("workouts");
+    if (!data) return;
     this.#workouts = JSON.parse(data);
 
-    this.#workouts.forEach(workout => {
-      this.#renderWorkout(workout)
+    this.#workouts.forEach((workout) => {
+      this.#renderWorkout(workout);
       //! TypeError: Cannot read properties of undefined (reading 'addLayer')
       // because we are trying to add markers on the map which is yet fully loaded
       // so we need to wait map is fully loaded and then we can add markers.
       // this.#renderWorkoutMarker(workout); // ? lets move this code to #loadMap() func.
-    })
+    });
   }
 
+  // #sortToDistance() {
+  //   this.#workouts.slice().sort((a, b) => a.distance - b.distance);
+  // }
+
   //! just for reset localstorage data in the console
-  reset(){
-    localStorage.removeItem('workouts');
+  reset() {
+    localStorage.removeItem("workouts");
     location.reload();
   }
 }
