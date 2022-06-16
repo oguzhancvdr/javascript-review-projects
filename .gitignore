@@ -1,1 +1,6 @@
 0-starter-project/
+22-forkify/flowcharts
+22-forkify/node_modules
+22-forkify/dist
+22-forkify/.parcel-cache
+22-forkify/.DS_Store
