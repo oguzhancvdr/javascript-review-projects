@@ -6,14 +6,6 @@ import 'core-js/stable'; // it is pollifilling everything else
 import 'regenerator-runtime/runtime';  // it is pollifilling async-await
 
 
-const timeout = function (s) {
-  return new Promise(function (_, reject) {
-    setTimeout(function () {
-      reject(new Error(`Request took too long! Timeout after ${s} second`));
-    }, s * 1000);
-  });
-};
-
 // https://forkify-api.herokuapp.com/v2
 
 
@@ -26,12 +18,18 @@ const controlRecipes = async function(){
 
     // loading recipe
     await model.loadRecipe(id)
-    // render recipe
+
+    // rendering recipe
     recipeView.render(model.state.recipe)
 
   } catch (error) {
-    console.error(error)
+    recipeView.renderError()
   }
 }
-const events = ['hashchange', 'load']
-events.forEach(ev => window.addEventListener(ev, controlRecipes))
+
+const init = function(){
+  // subscribe event with handler in the controller
+  recipeView.addHandlerRender(controlRecipes)
+}
+
+init()
