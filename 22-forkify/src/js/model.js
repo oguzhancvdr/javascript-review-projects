@@ -1,5 +1,3 @@
-'use strict'
-
 import { API_URL } from "./config";
 import { getJSON } from "./helpers";
 
