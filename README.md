@@ -1,3 +1,4 @@
+### Some projects can have their own readme.md file, remember to check it.
 ## You can see all projects at live below
 
 - [01-color-flipper](https://slider-flipper.netlify.app/index.html)
