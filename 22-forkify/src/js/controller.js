@@ -5,10 +5,11 @@ import searchView from './views/searchView';
 import 'core-js/stable'; // it is pollifilling everything else
 import 'regenerator-runtime/runtime';  // it is pollifilling async-await
 import resultsView from './views/resultsView';
+import paginationView from './views/paginationView';
 
-if(module.hot){
-  module.hot.accept();
-}
+// if(module.hot){
+//   module.hot.accept();
+// }
 
 // https://forkify-api.herokuapp.com/v2
 
@@ -45,16 +46,27 @@ const controlSearchResults = async function(){
     await model.loadSearchResults(query)
 
     // 3) render results
-    resultsView.render(model.state.search.results)
+    // resultsView.render(model.state.search.results) // all results
+    resultsView.render(model.getSearchResultsPage()) // first ten result
+
+    //4) render inital pagination buttons
+    paginationView.render(model.state.search)
   } catch (error) {
     console.error('error :>> ', error);
   }
+}
+
+const controlPagination = function(goToPage){
+  // Render NEW results
+  resultsView.render(model.getSearchResultsPage(goToPage))
+  // render NEW pagination buttons
+  paginationView.render(model.state.search)
 }
 
 const init = function(){
   // subscribe event with handler in the controller
   recipeView.addHandlerRender(controlRecipes)
   searchView.addHandlerSearch(controlSearchResults)
+  paginationView.addHandlerClick(controlPagination)
 }
-
 init()
