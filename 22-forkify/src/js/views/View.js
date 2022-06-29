@@ -12,6 +12,30 @@ export default class View{
     this._parentElement.insertAdjacentHTML('afterbegin', markup)
   }
 
+  update(data){
+    this._data = data;
+    const newMarkup = this._generateMarkup();
+    // convert string to real dom object
+    // newDOM like virtual DOM it lives in memory but not browser
+    const newDOM = document.createRange().createContextualFragment(newMarkup);
+    const newElements = Array.from(newDOM.querySelectorAll("*"))
+    const curElements = Array.from(this._parentElement.querySelectorAll('*'))
+
+    // compare virtual dom with real dom
+    // detect false ones with textnodes and change its textContent
+    newElements.forEach((newEl, i) => {
+      const curEl = curElements[i]
+      // Updates changed TEXT
+      if(!newEl.isEqualNode(curEl) && newEl.firstChild?.nodeValue.trim() !== ''){
+        curEl.textContent = newEl.textContent
+      }
+      // Updates changed ATTRIBUTES
+      if(!newEl.isEqualNode(curEl)){
+        Array.from(newEl.attributes).forEach(attr => curEl.setAttribute(attr.name, attr.value))
+      }
+    })
+  }
+
   _clear(){
     this._parentElement.innerHTML = ''
   }
