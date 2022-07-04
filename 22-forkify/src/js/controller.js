@@ -1,11 +1,12 @@
 import * as model from './model'
 import recipeView from './views/recipeView';
 import searchView from './views/searchView';
+import resultsView from './views/resultsView';
+import paginationView from './views/paginationView';
+import bookmarksView from './views/bookmarksView';
 
 import 'core-js/stable'; // it is pollifilling everything else
 import 'regenerator-runtime/runtime';  // it is pollifilling async-await
-import resultsView from './views/resultsView';
-import paginationView from './views/paginationView';
 
 // if(module.hot){
 //   module.hot.accept();
@@ -23,6 +24,7 @@ const controlRecipes = async function(){
 
     // Update result view to mark selected search result
     resultsView.update(model.getSearchResultsPage())
+    bookmarksView.update(model.state.bookmarks)
 
     // loading recipe
     await model.loadRecipe(id)
@@ -75,10 +77,14 @@ const controlServings = function(newServings){
 }
 
 const controlAddBookmark = function(){
+  // 1-) Add/Remove bookmark
   if(!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
   else model.deleteBookmark(model.state.recipe.id);
-  console.log(model.state.recipe);
+  // 2-) Update recipe view
   recipeView.update(model.state.recipe)
+
+  // 3-) Render bookmarks
+  bookmarksView.render(model.state.bookmarks) 
 }
 
 const init = function(){
