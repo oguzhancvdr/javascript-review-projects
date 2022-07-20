@@ -24,15 +24,19 @@ const controlRecipes = async function(){
 
     // Update result view to mark selected search result
     resultsView.update(model.getSearchResultsPage())
-    bookmarksView.update(model.state.bookmarks)
 
+    // updating bookmarks view
+    bookmarksView.update(model.state.bookmarks)
+    
     // loading recipe
     await model.loadRecipe(id)
-
+    
     // rendering recipe
     recipeView.render(model.state.recipe)
+
   } catch (error) {
     recipeView.renderError()
+    console.error(error)
   }
 }
 
@@ -87,12 +91,22 @@ const controlAddBookmark = function(){
   bookmarksView.render(model.state.bookmarks) 
 }
 
+const controlBookmarks = function(){
+  bookmarksView.render(model.state.bookmarks)
+}
+
 const init = function(){
   // subscribe event with handler in the controller
+  bookmarksView.addHandlerRender(controlBookmarks)
   recipeView.addHandlerRender(controlRecipes)
   recipeView.addHandlerUpdateServings(controlServings)
   recipeView.addHandlerAddBookmark(controlAddBookmark)
   searchView.addHandlerSearch(controlSearchResults)
   paginationView.addHandlerClick(controlPagination)  
 }
+// for development purpose uncomment 11st line and clear local storage
+const clearBookmarks = function(){
+  localStorage.clear('bookmarks')
+}
+// clearBookmarks()
 init()
