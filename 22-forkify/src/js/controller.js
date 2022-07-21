@@ -1,15 +1,16 @@
 import * as model from './model'
-import recipeView from './views/recipeView';
-import searchView from './views/searchView';
-import resultsView from './views/resultsView';
-import paginationView from './views/paginationView';
-import bookmarksView from './views/bookmarksView';
+import recipeView from './views/recipeView'
+import searchView from './views/searchView'
+import resultsView from './views/resultsView'
+import paginationView from './views/paginationView'
+import bookmarksView from './views/bookmarksView'
+import addRecipeView from './views/addRecipeView'
 
-import 'core-js/stable'; // it is pollifilling everything else
-import 'regenerator-runtime/runtime';  // it is pollifilling async-await
+import 'core-js/stable' // it is pollifilling everything else
+import 'regenerator-runtime/runtime'  // it is pollifilling async-await
 
 // if(module.hot){
-//   module.hot.accept();
+//   module.hot.accept()
 // }
 
 // https://forkify-api.herokuapp.com/v2
@@ -19,7 +20,7 @@ const controlRecipes = async function(){
   try {
     const id = window.location.hash.slice(1)
 
-    if(!id) return;
+    if(!id) return
     recipeView.renderSpinner()
 
     // Update result view to mark selected search result
@@ -45,7 +46,7 @@ const controlSearchResults = async function(){
     resultsView.renderSpinner()
     // 1) get search query
     const query = searchView.getQuery()
-    if(!query) return;
+    if(!query) return
     // it doesn't return anything
     // it is just manipulating state
     // thus we don't assign this data in any variable
@@ -60,7 +61,7 @@ const controlSearchResults = async function(){
     //4) render inital pagination buttons
     paginationView.render(model.state.search)
   } catch (error) {
-    console.error('error :>> ', error);
+    console.error('error :>> ', error)
   }
 }
 
@@ -82,8 +83,8 @@ const controlServings = function(newServings){
 
 const controlAddBookmark = function(){
   // 1-) Add/Remove bookmark
-  if(!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe);
-  else model.deleteBookmark(model.state.recipe.id);
+  if(!model.state.recipe.bookmarked) model.addBookmark(model.state.recipe)
+  else model.deleteBookmark(model.state.recipe.id)
   // 2-) Update recipe view
   recipeView.update(model.state.recipe)
 
@@ -95,6 +96,10 @@ const controlBookmarks = function(){
   bookmarksView.render(model.state.bookmarks)
 }
 
+const controlAddRecipe = function(newRecipe){
+console.log('newRecipe :>> ', newRecipe);
+}
+
 const init = function(){
   // subscribe event with handler in the controller
   bookmarksView.addHandlerRender(controlBookmarks)
@@ -102,7 +107,8 @@ const init = function(){
   recipeView.addHandlerUpdateServings(controlServings)
   recipeView.addHandlerAddBookmark(controlAddBookmark)
   searchView.addHandlerSearch(controlSearchResults)
-  paginationView.addHandlerClick(controlPagination)  
+  paginationView.addHandlerClick(controlPagination)
+  addRecipeView.addHandlerUpload(controlAddRecipe)  
 }
 // for development purpose uncomment 11st line and clear local storage
 const clearBookmarks = function(){
