@@ -121,7 +121,6 @@ const controlAddRecipe = async function(newRecipe){
   // Close form window
   setTimeout(function(){
     addRecipeView._toggleWindow()
-    addRecipeView._clear()
     addRecipeView.render(model.state.recipe, true)
   }, MODAL_CLOSE_SEC * 1000)
 }

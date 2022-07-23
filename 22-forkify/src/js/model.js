@@ -39,7 +39,6 @@ export const loadRecipe = async function(id){
     if(state.bookmarks.some(bookmark => bookmark.id === id))
       state.recipe.bookmarked = true
     else state.recipe.bookmarked = false
-    console.log(state.recipe);
   } catch (error) {
     // to reject promise and access this error object from controller
     throw error
@@ -131,8 +130,6 @@ export const uploadRecipe = async function(newRecipe){
     const data = await AJAX(`${API_URL}?key=${API_KEY}`, recipe)
     state.recipe = createRecipeObject(data)
     addBookmark(state.recipe)
-    console.log(state.recipe);
-
   } catch (error) {
     throw error
   }
