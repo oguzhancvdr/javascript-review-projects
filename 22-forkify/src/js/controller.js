@@ -8,12 +8,15 @@ import addRecipeView from './views/addRecipeView'
 
 import 'core-js/stable' // it is pollifilling everything else
 import 'regenerator-runtime/runtime'  // it is pollifilling async-await
+import { MODAL_CLOSE_SEC } from './config'
 
 // if(module.hot){
 //   module.hot.accept()
 // }
 
 // https://forkify-api.herokuapp.com/v2
+// API_KEY = 2014899b-55ca-4b4b-ad17-2d36202647d5
+
 
 
 const controlRecipes = async function(){
@@ -96,8 +99,25 @@ const controlBookmarks = function(){
   bookmarksView.render(model.state.bookmarks)
 }
 
-const controlAddRecipe = function(newRecipe){
-console.log('newRecipe :>> ', newRecipe);
+const controlAddRecipe = async function(newRecipe){
+  try {
+    // render spinner
+    addRecipeView.renderSpinner()
+    // Upload recipe
+    await model.uploadRecipe(newRecipe)
+    // Render recipe
+    recipeView.render(model.state.recipe);
+    // Success message
+    addRecipeView.renderSuccessMsg()
+    // Close form window
+    setTimeout(function(){
+      addRecipeView._toggleWindow()
+    }, MODAL_CLOSE_SEC * 1000)
+  } catch (error) {
+    console.error(error , "🔥");
+    addRecipeView.renderError(error.message)
+  }
+
 }
 
 const init = function(){
