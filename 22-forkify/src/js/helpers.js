@@ -8,36 +8,18 @@ const timeout = function (s) {
   });
 };
 
-export const getJSON = async function(url){
+export const AJAX = async function (url, uploadData = undefined) {
   try {
-    const fetchPro = fetch(url)
-    /**
-     * Promise.race() will reject ot fullfilled which is the first occurs
-     * if first occuring is the rejecting then catch block will throw its reject message
-     * or else it will return data successfully
-     */
-    // reject promise after 3 sec
-    const res = await Promise.race([fetchPro, timeout(TIMEOUT_SEC)]);
-    const data = await res.json();
-    
-    if(!res.ok) throw new Error(`${data.message} (${res.status})`);
-    return data; // resolved value of this async function
-    
-  } catch (error) {
-    // now our promise will reject promise if error occurs
-    throw error;
-  }
-}
+    const fetchPro = uploadData
+      ? fetch(url, {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(uploadData),
+        })
+      : fetch(url);
 
-export const sendJSON = async function(url, uploadData){
-  try {
-    const fetchPro = fetch(url, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(uploadData),
-    })
     /**
      * Promise.race() will reject ot fullfilled which is the first occurs
      * if first occuring is the rejecting then catch block will throw its reject message
@@ -46,12 +28,11 @@ export const sendJSON = async function(url, uploadData){
     // reject promise after 3 sec
     const res = await Promise.race([fetchPro, timeout(TIMEOUT_SEC)]);
     const data = await res.json();
-    
-    if(!res.ok) throw new Error(`${data.message} (${res.status})`);
+
+    if (!res.ok) throw new Error(`${data.message} (${res.status})`);
     return data; // resolved value of this async function
-    
   } catch (error) {
     // now our promise will reject promise if error occurs
     throw error;
   }
-}
+};
