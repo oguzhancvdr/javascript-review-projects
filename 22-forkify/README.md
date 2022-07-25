@@ -13,7 +13,7 @@ Server will running at http://localhost:1234
 
 ## Live version
 
-Under development
+[here](https://62defc55b77095000ab1d347--forkify-oguzhan.netlify.app/)
 
 ## Objective
 
