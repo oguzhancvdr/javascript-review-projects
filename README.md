@@ -22,3 +22,4 @@
 - [19-bankist-landing](https://bankist-landing-app.netlify.app/)
 - [20-maptify](https://maptfiy.netlify.app/)
 - [21-where-am-i](https://findwhereami.netlify.app/)
+- [22-forkify](https://62defc55b77095000ab1d347--forkify-oguzhan.netlify.app/)
