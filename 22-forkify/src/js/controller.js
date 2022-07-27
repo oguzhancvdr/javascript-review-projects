@@ -15,9 +15,6 @@ import { MODAL_CLOSE_SEC } from './config'
 // }
 
 // https://forkify-api.herokuapp.com/v2
-// API_KEY = 2014899b-55ca-4b4b-ad17-2d36202647d5
-
-
 
 const controlRecipes = async function(){
   try {
@@ -134,7 +131,6 @@ const init = function(){
   searchView.addHandlerSearch(controlSearchResults)
   paginationView.addHandlerClick(controlPagination)
   addRecipeView.addHandlerUpload(controlAddRecipe)  
-  console.log("welcome v2 forkify");
 }
 // for development purpose uncomment 11st line and clear local storage
 const clearBookmarks = function(){
